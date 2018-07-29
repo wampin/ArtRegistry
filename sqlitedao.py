@@ -2,34 +2,31 @@ import sqlite3
 import sys
 
 class SqliteDao:
-'''Gives access to the database through a connection building function called Connection. Holds sql for insert, update, delete, and select queries.'''
-    def Connection(self, dbPath=":memory:"):
-        ''' Takes a database path as an argument and returns a connection object fort that database path '''
+    def __init__(self):
+        ''' Gives access to the database through a connection building function called Connection. Holds sql for insert, update, delete, and select queries.  '''
 
+    def Connect(self, dbPath=":memory:"):
+        ''' Takes a database path as an argument and returns a connection object fort that database path '''
         conn = sqlite3.connect(dbPath)
         return conn
 
-    def EndConnection(self,conn):
-        conn.close()
-
-    def addTables(self,conn):
+    def AddTables(self,conn):
         ''' Takes a connection object and creates the tables needed for my database '''
-
         c = conn.cursor()
         #Create piece table
         c.execute('''
                     CREATE TABLE piece
                     (
-                    	id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    	title VARCHAR(100) NOT NULL,
-                    	medium VARCHAR(100), 
-                    	dimensions VARCHAR(100),
-                    	signature_location VARCHAR(40),
-                    	date_completed VARCHAR(100) NOT NULL,
-                    	notes VARCHAR(100)
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title VARCHAR(100) NOT NULL,
+                        medium VARCHAR(100), 
+                        dimensions VARCHAR(100),
+                        signature_location VARCHAR(40),
+                        date_completed VARCHAR(100) NOT NULL,
+                        notes VARCHAR(100)
                     );
                 ''')
-        
+
         #Create sold table
         c.execute('''
                     CREATE TABLE sold
@@ -44,7 +41,7 @@ class SqliteDao:
                             FOREIGN KEY(contacts_id) REFERENCES contacts(id)
                     );
                 ''');
-        
+
         #Create contact table
         c.execute('''
                     CREATE TABLE contact
@@ -59,7 +56,7 @@ class SqliteDao:
                             FOREIGN KEY(gallery_id) REFERENCES gallery(id)
                     );
                 ''');
-        
+
         #Create gallery table
         c.execute('''
                     CREATE TABLE gallery
@@ -73,47 +70,43 @@ class SqliteDao:
                             phone INTEGER
                     );
                 ''');
-        
+
         #Create show table
         c.execute('''
                     CREATE TABLE show
                     (
                             id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                            gallery_id INTEGER NOT NULL,
-                            date_start VARCHAR(100) NOT NULL,
-                            date_end VARCHAR(100) NOT NULL,
-                            FOREIGN KEY(gallery_id) REFERENCES gallery(id)
-                    );
-                ''');
-        
-        #Create show_piece table
+                        gallery_id INTEGER NOT NULL,
+                        date_start VARCHAR(100) NOT NULL,
+                        date_end VARCHAR(100) NOT NULL,
+                        FOREIGN KEY(gallery_id) REFERENCES gallery(id)
+                );
+            ''');
+
+    #Create show_piece table
         c.execute('''
-                    CREATE TABLE show_piece
-                    (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            show_id INTEGER NOT NULL,
-                            piece_id INTEGER NOT NULL,
-                            FOREIGN KEY(piece_id) REFERENCES piece(id)
-                            FOREIGN KEY(show_id) REFERENCES piece(id)
-                    );
-                ''');
+                        CREATE TABLE show_piece
+                        (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                show_id INTEGER NOT NULL,
+                                piece_id INTEGER NOT NULL,
+                                FOREIGN KEY(piece_id) REFERENCES piece(id)
+                                FOREIGN KEY(show_id) REFERENCES piece(id)
+                        );
+                    ''');
         print('tables created')
 
-    def insPiece(self,conn):
+    def InsPiece(self,conn):
         ''' Inserts a piece into database table piece '''
-
         c = conn.cursor()
         c.execute(''' INSERT INTO piece(title,medium,dimensions,signature_location,date_completed,notes) VALUES('Anonymous Soldier','Oil','10x10','back left corner','10/10/10','some notes about the piece'); ''')
 
-    def selPiece_One(self,conn):
-        ''' selects the first piece from the database table piece '''
-        c = conn.cursor()
-        c.execute('SELECT * from piece')
-        row = c.fetchone()
-        print(row[0])
-        print(row[1])
-        print(row[2])
-        print(row[3])
-        print(row[4])
-        print(row[5])
-
+    def SelPiece_One(self,conn):
+            ''' 
+                Selects the first piece from the database table piece 
+            '''
+            c = conn.cursor()
+            c.execute('SELECT * from piece')
+            row = c.fetchone()
+            for r in row:
+                print(r)
