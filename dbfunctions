@@ -93,6 +93,7 @@ def CreateTables():
 
 def InsPiece(title, medium, dimensions, signature_location, date, notes):
     '''Inserts a piece into database table piece'''
+
     p = [title, medium, dimensions, signature_location, date, notes]
 
     c.execute("INSERT INTO piece(title, medium, dimensions, signature_location, date_completed, notes) VALUES(?,?,?,?,?,?)", p)
