@@ -1,18 +1,13 @@
 import sqlite3
 import sys
 
-class SqliteDao:
-    def __init__(self):
-        ''' Gives access to the database through a connection building function called Connection. Holds sql for insert, update, delete, and select queries.  '''
+    dbPath=":memory:"
+    conn = sqlite3.connect(dbPath)
+    c = conn.cursor()
 
-    def Connect(self, dbPath=":memory:"):
-        ''' Takes a database path as an argument and returns a connection object fort that database path '''
-        conn = sqlite3.connect(dbPath)
-        return conn
-
-    def AddTables(self,conn):
+    def CreateTables():
         ''' Takes a connection object and creates the tables needed for my database '''
-        c = conn.cursor()
+
         #Create piece table
         c.execute('''
                     CREATE TABLE piece
@@ -96,15 +91,13 @@ class SqliteDao:
                     ''');
         print('tables created')
 
-    def InsPiece(self,conn):
+    def InsPiece():
         ''' Inserts a piece into database table piece '''
-        c = conn.cursor()
+
         c.execute(''' INSERT INTO piece(title,medium,dimensions,signature_location,date_completed,notes) VALUES('Anonymous Soldier','Oil','10x10','back left corner','10/10/10','some notes about the piece'); ''')
 
-    def SelPiece_One(self,conn):
-            ''' 
-                Selects the first piece from the database table piece 
-            '''
+    def SelPiece_One():
+            '''Selects the first piece from the database table piece'''
             c = conn.cursor()
             c.execute('SELECT * from piece')
             row = c.fetchone()
