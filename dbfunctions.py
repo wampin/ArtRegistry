@@ -8,7 +8,7 @@ c = conn.cursor()
 def CreateTables():
     '''creates the tables for Art Register database'''
 
-    #Create piece table
+    # Create piece table
     c.execute('''
                 CREATE TABLE piece
                 (
@@ -22,7 +22,7 @@ def CreateTables():
                 );
             ''')
 
-    #Create sold table
+    # Create sold table
     # Columns: gallery_id, contacts_id, wholesale, gallery_percent, date_purchased, gallery(id),contacts(id)
     c.execute('''
                 CREATE TABLE sold
@@ -38,7 +38,8 @@ def CreateTables():
                 );
             ''');
 
-    #Create contact table
+    # Create contact table
+    # Columns: address, city, state, zip, phone, gallery_id
     c.execute('''
                 CREATE TABLE contact
                 (
@@ -53,7 +54,8 @@ def CreateTables():
                 );
             ''');
 
-    #Create gallery table
+    # Create gallery table
+    # Columns: name, address, city, state, zip, phone
     c.execute('''
                 CREATE TABLE gallery
                 (
@@ -67,7 +69,8 @@ def CreateTables():
                 );
             ''');
 
-    #Create show table
+    # Create show table
+    # Columns: gallery_id, date_start, date_end 
     c.execute('''
                 CREATE TABLE show
                 (
@@ -79,18 +82,47 @@ def CreateTables():
             );
         ''');
 
-#Create show_piece table
+    # Create show_piece table
+    # Columns: show_id, piece_id
     c.execute('''
-                    CREATE TABLE show_piece
-                    (
-                            id INTEGER PRIMARY KEY AUTOINCREMENT,
-                            show_id INTEGER NOT NULL,
-                            piece_id INTEGER NOT NULL,
-                            FOREIGN KEY(piece_id) REFERENCES piece(id)
-                            FOREIGN KEY(show_id) REFERENCES piece(id)
-                    );
-                ''');
+                CREATE TABLE show_piece
+                (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        show_id INTEGER NOT NULL,
+                        piece_id INTEGER NOT NULL,
+                        FOREIGN KEY(piece_id) REFERENCES piece(id)
+                        FOREIGN KEY(show_id) REFERENCES piece(id)
+                );
+            ''');
     print('tables created')
+
+def InsPiece_Show( show_id, piece_id ):
+    '''Insert new contact'''
+
+    p = [ show_id, piece_id ]
+
+    c.execute("INSERT INTO piece( show_id, piece_id ) VALUES(?,?)", p)
+
+def InsShow( gallery_id, date_start, date_end ):
+    '''Insert new contact'''
+
+    p = [ gallery_id, date_start, date_end ]
+
+    c.execute("INSERT INTO piece( gallery_id, date_start, date_end ) VALUES(?,?,?)", p)
+
+def InsGallery( name, address, city, state, zip, phone ):
+    '''Insert new contact'''
+
+    p = [ name, address, city, state, zip, phone ]
+
+    c.execute("INSERT INTO piece( name, address, city, state, zip, phone ) VALUES(?,?,?,?,?,?)", p)
+
+def InsContact( address, city, state, zip, phone, gallery_id ):
+    '''Insert new contact'''
+
+    p = [ address, city, state, zip, phone, gallery_id ]
+
+    c.execute("INSERT INTO piece( address, city, state, zip, phone, gallery_id ) VALUES(?,?,?,?,?,?)", p)
 
 def InsPiece(title, medium, dimensions, signature_location, date, notes):
     '''Inserts a piece into piece table'''
