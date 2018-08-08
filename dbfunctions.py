@@ -6,7 +6,7 @@ conn = sqlite3.connect(dbPath)
 c = conn.cursor()
 
 def CreateTables():
-    ''' Takes a connection object and creates the tables needed for my database '''
+    '''creates the tables for Art Register database'''
 
     #Create piece table
     c.execute('''
@@ -23,6 +23,7 @@ def CreateTables():
             ''')
 
     #Create sold table
+    # Columns: gallery_id, contacts_id, wholesale, gallery_percent, date_purchased, gallery(id),contacts(id)
     c.execute('''
                 CREATE TABLE sold
                 ( 
@@ -92,11 +93,18 @@ def CreateTables():
     print('tables created')
 
 def InsPiece(title, medium, dimensions, signature_location, date, notes):
-    '''Inserts a piece into database table piece'''
+    '''Inserts a piece into piece table'''
 
-    p = [title, medium, dimensions, signature_location, date, notes]
+    p = [ title, medium, dimensions, signature_location, date, notes ]
 
     c.execute("INSERT INTO piece(title, medium, dimensions, signature_location, date_completed, notes) VALUES(?,?,?,?,?,?)", p)
+
+def InsSold():
+    '''Inserts transaction into the sold table'''
+
+    p = [ gallery_id, contacts_id, wholesale, gallery_percent, date_purchased, gallery.id,contacts.id ]
+
+    c.execute("INSERT INTO sold(gallery_id, contacts_id, wholesale, gallery_percent, date_purchased, gallery_id,contacts_id) VALUES(?,?,?,?,?,?)", p)
 
 def SelPiece_One():
         '''Selects the first piece from the database table piece'''
@@ -107,5 +115,3 @@ def SelPiece_One():
             print(r)
 
 
-
-#(title,medium,dimensions,signature_location,date_completed,notes)
